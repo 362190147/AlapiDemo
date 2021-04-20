@@ -1,0 +1,3 @@
+include ':alapi'
+include ':app'
+rootProject.name = "AlapiDemo"
