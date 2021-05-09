@@ -4,7 +4,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
 import org.junit.Assert.*
-import top.yumesekai.alapi.AlApi
+import top.yumesekai.alapi.AlapiManager
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -18,12 +18,27 @@ class ExampleUnitTest {
     }
 
     @Test
-    fun dogTest(){
+    fun apiTest(){
         runBlocking {
-            var  data=AlApi.instance.api.getDogDiary("MXIusDFLSd7F4evvlTTY")
-            print(data.toString())
-             data=AlApi.instance.api.getDogDiary("MXIusDFLSd7F4evvlTTY")
-            print(data.toString())
+            var  data=AlapiManager.instance.api.getDogDiary()
+            assertEquals(200, data.code)
+            data.data?.let { println(it.content)}
+
+            var hitokoto=AlapiManager.instance.api.getHitokoto()
+            assertEquals(200, hitokoto.code)
+            println(hitokoto.toString())
+            hitokoto.data?.let { println(it) }
+
+            data=AlapiManager.instance.api.getQinghua()
+            assertEquals(200, data.code)
+            data.data?.let { println(it.content) }
+
+            AlapiManager.instance.api.getSoul().let {
+                assertEquals(200, it.code)
+                 println(it)
+            }
+
+
         }
     }
 }
