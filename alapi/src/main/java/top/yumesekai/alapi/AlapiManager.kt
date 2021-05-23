@@ -11,30 +11,36 @@ import java.io.IOException
 /**
  *
  */
-class AlapiManager( var token:String){
+class AlapiManager(){
     val api: AlApi
     init {
-        val builder = OkHttpClient.Builder()
-        //统一添加token
-        builder.interceptors().add(Interceptor { chain ->
-            val original: Request = chain.request()
-            // Request customization: add request headers
-            val requestBuilder: Request.Builder = original.newBuilder()
+        val client = OkHttpClient.Builder()
+            //统一添加token
+            .addInterceptor(Interceptor { chain ->
+                val original: Request = chain.request()
+                // Request customization: add request headers
+                val requestBuilder: Request.Builder = original.newBuilder()
                     .addHeader("token", token)
-            val request: Request = requestBuilder.build()
-            chain.proceed(request)
-        })
+                val request: Request = requestBuilder.build()
+                chain.proceed(request)
+            })
+            .build()
+
         var retrofit = Retrofit.Builder()
                 .baseUrl("https://v1.alapi.cn/")
-                .client(builder.build())
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
         api = retrofit.create(AlApi::class.java);
     }
 
     companion object{
+        private var token = ""
+        fun init(token:String){
+            this.token = token;
+        }
         val instance by lazy {
-            AlapiManager( "MXIusDFLSd7F4evvlTTY")
+            AlapiManager()
         }
     }
 }

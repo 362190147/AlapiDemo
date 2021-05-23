@@ -20,23 +20,28 @@ class ExampleUnitTest {
     @Test
     fun apiTest(){
         runBlocking {
-            var  data=AlapiManager.instance.api.getDogDiary()
-            assertEquals(200, data.code)
-            data.data?.let { println(it.content)}
+            AlapiManager.init("MXIusDFLSd7F4evvlTTY")
+            AlapiManager.instance.api.apply {
 
-            var hitokoto=AlapiManager.instance.api.getHitokoto()
-            assertEquals(200, hitokoto.code)
-            println(hitokoto.toString())
-            hitokoto.data?.let { println(it) }
+                var  data = getDogDiary()
+                assertEquals(200, data.code)
+                data.data?.let { println(it.content)}
 
-            data=AlapiManager.instance.api.getQinghua()
-            assertEquals(200, data.code)
-            data.data?.let { println(it.content) }
+                var hitokoto = getHitokoto()
+                assertEquals(200, hitokoto.code)
+                println(hitokoto.toString())
+                hitokoto.data?.let { println(it) }
 
-            AlapiManager.instance.api.getSoul().let {
-                assertEquals(200, it.code)
-                 println(it)
+                data = getQinghua()
+                assertEquals(200, data.code)
+                data.data?.let { println(it.content) }
+
+                getSoul().let {
+                    assertEquals(200, it.code)
+                    println(it)
+                }
             }
+
 
 
         }
